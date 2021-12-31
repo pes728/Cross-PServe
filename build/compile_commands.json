@@ -1,0 +1,47 @@
+[
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\Image.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\Image.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/Image.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\Render.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\Render.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/Render.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\Sphere.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\Sphere.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/Sphere.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\aabb.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\aabb.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/aabb.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\bvh_node.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\bvh_node.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/bvh_node.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\hittable_list.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\hittable_list.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/hittable_list.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\main.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\main.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/main.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\moving_sphere.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\moving_sphere.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/moving_sphere.cpp"
+},
+{
+  "directory": "C:/Users/Administrator/Dev/PServe-master/build/PServe/src",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/PServe.dir/includes_CXX.rsp -O3 -DNDEBUG -o CMakeFiles\\PServe.dir\\vec3.cpp.obj -c C:\\Users\\Administrator\\Dev\\PServe-master\\PServe\\src\\vec3.cpp",
+  "file": "C:/Users/Administrator/Dev/PServe-master/PServe/src/vec3.cpp"
+}
+]
