@@ -151,37 +151,37 @@ Frame ray_colorR(const ray& r, const hittable& world, int depth) {
 
 
 
-void render_pixel(int x, int y, int image_width, int image_height, int samples, int max_depth, Camera c, const hittable& world, FrameBuffer* frame){
+void render_pixel(int x, int y, RenderSettings settings){
     vec3 color(0, 0, 0);
     vec3 albedo(0, 0, 0);
     vec3 normal(0, 0, 0);
-    for (int s = 0; s < samples; s++) {
-        auto u = (x + random_double()) / (image_width-1);
-        auto v = (y + random_double()) / (image_height-1);
-        ray r = c.get_ray(u, v);
+    for (int s = 0; s < settings.samples; s++) {
+        auto u = (x + random_double()) / (settings.width-1);
+        auto v = (y + random_double()) / (settings.height-1);
+        ray r = settings.cam.get_ray(u, v);
 
 
-        Frame f = ray_colorR(r, world, max_depth);
+        Frame f = ray_colorR(r, *(settings.world), settings.max_depth);
         color += f.color;
         albedo += f.albedo;
         normal += f.normal;
     }
 
-    setPixel(x, y, image_width, image_height, color / samples, frame->color, true);
-    setPixel(x, y, image_width, image_height, albedo / samples, frame->albedo, true);
-    setPixel(x, y, image_width, image_height, unit_vector(normal / samples), frame->normal, true);
+    setPixel(x, y, settings.width, settings.height, color / settings.samples, settings.framebuffer->color, true);
+    setPixel(x, y, settings.width, settings.height, albedo / settings.samples, settings.framebuffer->albedo, true);
+    setPixel(x, y, settings.width, settings.height, unit_vector(normal / settings.samples), settings.framebuffer->normal, true);
 }
 
-void thread_manager(int id, int jump_value, int image_width, int image_height, int samples, int max_depth, Camera c, const hittable& world, FrameBuffer* frame){
+void thread_manager(int id, int jump_value, RenderSettings settings){
     int index = id;
-    while(index < image_width * image_height){
-        render_pixel(index % image_width , index / image_width, image_width, image_height, samples, max_depth, c, world, frame);
+    while(index < settings.width * settings.height){
+        render_pixel(index % settings.width , index / settings.width, settings);
         index += jump_value;
     }
     std::cout << "Thread " << id << ": DONE" << std::endl;
 }
 
-void render(int image_width, int image_height, int samples, int max_depth, Camera c, const hittable& world, FrameBuffer* frame){
+void render(RenderSettings settings){
     std::clock_t start = std::clock();
     
     
@@ -191,14 +191,14 @@ void render(int image_width, int image_height, int samples, int max_depth, Camer
 
         std::cout << "Beginning\nTotal threads: " << THREADS << std::endl;
 
-        for (unsigned int i = 0; i < THREADS; i++) t[i] = std::thread(thread_manager, i, THREADS, image_width, image_height, samples, max_depth, c, std::ref(world), frame);
+        for (unsigned int i = 0; i < THREADS; i++) t[i] = std::thread(thread_manager, i, THREADS, settings);
         for (unsigned int i = 0; i < THREADS; i++) t[i].join();
     }
     else {
-        for (int y = 0; y < image_height; y++) {
+        for (int y = 0; y < settings.height; y++) {
             std::cout << "Scanlines completed: " << y << '\r' << std::flush;
-            for (int x = 0; x < image_width; x++) {
-                render_pixel(x, y, image_width, image_height, samples, max_depth, c, world, frame);
+            for (int x = 0; x < settings.width; x++) {
+                render_pixel(x, y, settings);
             }
         }
     }

@@ -6,16 +6,21 @@
 #include <imgui_impl_opengl2.h>
 #include <imgui_impl_glfw.h>
 #include "Render.h"
+#include <RenderSettings.h>
 
 class Window {
 public:
-	int createWindow(unsigned int width, unsigned int height);
+	Window(RenderSettings settings, const char* saveFile);
+	int createWindow();
 	void begin();
-
+	void uploadImage(bool flip);
+	
 	GLuint texID;
 	GLFWwindow* windowPtr;
-	void uploadTexture(uint8_t* data, bool flip);
+	RenderSettings settings;
+	const char* saveFile;
+
 private:
+	uint8_t* image;
 	bool texUploaded;
-	unsigned int width, height;
 };

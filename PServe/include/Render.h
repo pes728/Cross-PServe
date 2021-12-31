@@ -31,8 +31,9 @@
 #include <ctime>
 #include "FrameBuffer.h"
 #include <iomanip>
+#include "RenderSettings.h"
 
-void render(int image_width, int image_height, int samples, int max_depth, Camera c, const hittable& world, FrameBuffer* frame);
+void render(RenderSettings);
 
 hittable_list random_scene();
 

@@ -1,11 +1,15 @@
 #include "Window.h"
 
-int Window::createWindow(unsigned int width, unsigned int height) {
-    this->width = width;
-    this->height = height;
+Window::Window(RenderSettings settings, const char* saveFile) {
+    this->settings = settings;
+    this->saveFile = saveFile;
+    this->image = (uint8_t*)malloc(settings.width * settings.height * 3 * sizeof(uint8_t));
+}
+
+int Window::createWindow() {
     
     if (!glfwInit()) return -1;
-    windowPtr = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
+    windowPtr = glfwCreateWindow(settings.width, settings.height, "Hello World", NULL, NULL);
     if (!windowPtr)
     {
         glfwTerminate();
@@ -33,22 +37,22 @@ int Window::createWindow(unsigned int width, unsigned int height) {
     return 0;
 }
 
-void Window::uploadTexture(uint8_t* data, bool flip) {
-    uint8_t* texture = data;
+void Window::uploadImage(bool flip) {
+    uint8_t* texture;
     if (flip) {
-        texture = (uint8_t*)malloc(width * height * 3 * sizeof(uint8_t));
-        for(int y = 0; y < height; y++){
-            for (int x = 0; x < width; x++) {
-                int newIndex = 3 * (x + (height - 1 - y) * width);
-                texture[newIndex + 0] = data[3 * (x + y * width) + 0];
-                texture[newIndex + 1] = data[3 * (x + y * width) + 1];
-                texture[newIndex + 2] = data[3 * (x + y * width) + 2];
+        texture = (uint8_t*)malloc(settings.width * settings.height * 3 * sizeof(uint8_t));
+        for(int y = 0; y < settings.height; y++){
+            for (int x = 0; x < settings.width; x++) {
+                int newIndex = 3 * (x + (settings.height - 1 - y) * settings.width);
+                texture[newIndex + 0] = image[3 * (x + y * settings.width) + 0];
+                texture[newIndex + 1] = image[3 * (x + y * settings.width) + 1];
+                texture[newIndex + 2] = image[3 * (x + y * settings.width) + 2];
             }
         }
     }
 
     texUploaded = true; 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, settings.width, settings.height, 0, GL_RGB, GL_UNSIGNED_BYTE, flip? texture: image);
 
     if (flip) free(texture);
 }
@@ -72,12 +76,14 @@ void Window::begin() {
             ImGui::Begin("Hello, world!");
 
 
-            if (ImGui::Button("Render")) 
-                render(image_width, image_height, samples, max_depth, cam, bvh, frame);
+            if (ImGui::Button("Render")) {
+                render(settings);
+                imageToColor(settings.width, settings.height, image, settings.framebuffer->color);
+                uploadImage(true);
+            }
              
             if (ImGui::Button("Save Image")) {
-                imageToColor(image_width, image_height, image, frame->color);
-                saveImage("", std::string(FILENAME), image_width, image_height, image);
+                saveImage("", std::string(saveFile), settings.width, settings.height, image);
             }
 
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
