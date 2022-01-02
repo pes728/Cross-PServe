@@ -14,7 +14,7 @@ public:
 class FrameBuffer {
 public:
 	FrameBuffer(int width, int height) {
-		size_t size = width * height * 3;
+		size_t size = (size_t)(width * height) * 3;
 		albedo = new float[size];
 		normal = new float[size];
 		color = new float[size];

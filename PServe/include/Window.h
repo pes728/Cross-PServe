@@ -20,6 +20,8 @@ public:
 	const char* saveFile;
 
 private:
+	std::thread renderThread;
+	std::atomic_bool* finishedRendering;
 	uint8_t* image;
 	bool texUploaded;
 };

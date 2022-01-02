@@ -33,7 +33,7 @@
 #include <iomanip>
 #include "RenderSettings.h"
 
-void render(RenderSettings);
+void render(RenderSettings, std::atomic_bool* finished);
 
 hittable_list random_scene();
 

@@ -3,8 +3,11 @@
 Window::Window(RenderSettings settings, const char* saveFile) {
     this->settings = settings;
     this->saveFile = saveFile;
-    this->image = new uint8_t[settings.width * settings.height * 3];
-    this->texUploaded = false;
+    image = new uint8_t[settings.width * settings.height * 3];
+    texUploaded = false;
+    texID = NULL;
+    windowPtr = nullptr;
+    finishedRendering = new std::atomic_bool(false);
 }
 
 int Window::createWindow() {
@@ -74,12 +77,21 @@ void Window::begin() {
 
         ImGui::Begin("Hello, world!");
 
-
-        if (ImGui::Button("Render")) {
-            render(settings);
+        if (finishedRendering->load()) {
+            std::cout << "joining" << std::endl;
+            renderThread.join();
+            finishedRendering->store(false);
+            renderThread.~thread();
+           
             imageToColor(settings.width, settings.height, image, settings.framebuffer->color);
             uploadImage(true);
         }
+
+        if (ImGui::Button("Render")) {
+            renderThread = std::thread(render, settings, finishedRendering);
+        }
+
+
 
         if (ImGui::Button("Save Image")) {
             saveImage("", std::string(saveFile), settings.width, settings.height, image);

@@ -178,22 +178,19 @@ void thread_manager(int id, int jump_value, RenderSettings settings){
         render_pixel(index % settings.width , index / settings.width, settings);
         index += jump_value;
     }
-    std::cout << "Thread " << id << ": DONE" << std::endl;
 }
 
-void render(RenderSettings settings){
+void render(RenderSettings settings, std::atomic_bool* finished){
     std::clock_t start = std::clock();
-    
-    
 
     if (MULTI_THREADED) {
-        std::thread t[THREADS];
+        std::vector<std::thread> renderThreads(THREADS);
 
-        std::cout << "Beginning\nTotal threads: " << THREADS << std::endl;
-
-        for (unsigned int i = 0; i < THREADS; i++) t[i] = std::thread(thread_manager, i, THREADS, settings);
-        for (unsigned int i = 0; i < THREADS; i++) t[i].join();
+        for (unsigned int i = 0; i < THREADS; i++) renderThreads[i] = std::thread(thread_manager, i, THREADS, settings);
+        for (unsigned int i = 0; i < THREADS; i++) renderThreads[i].join();
+        finished->store(true);
     }
+    //SingleThreaded
     else {
         for (int y = 0; y < settings.height; y++) {
             std::cout << "Scanlines completed: " << y << '\r' << std::flush;
