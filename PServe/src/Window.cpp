@@ -3,7 +3,8 @@
 Window::Window(RenderSettings settings, const char* saveFile) {
     this->settings = settings;
     this->saveFile = saveFile;
-    this->image = (uint8_t*)malloc(settings.width * settings.height * 3 * sizeof(uint8_t));
+    this->image = new uint8_t[settings.width * settings.height * 3];
+    this->texUploaded = false;
 }
 
 int Window::createWindow() {
@@ -40,9 +41,9 @@ int Window::createWindow() {
 void Window::uploadImage(bool flip) {
     uint8_t* texture;
     if (flip) {
-        texture = (uint8_t*)malloc(settings.width * settings.height * 3 * sizeof(uint8_t));
-        for(int y = 0; y < settings.height; y++){
-            for (int x = 0; x < settings.width; x++) {
+        texture = new uint8_t[settings.width * settings.height * 3];
+        for(unsigned int y = 0; y < settings.height; y++){
+            for (unsigned int x = 0; x < settings.width; x++) {
                 int newIndex = 3 * (x + (settings.height - 1 - y) * settings.width);
                 texture[newIndex + 0] = image[3 * (x + y * settings.width) + 0];
                 texture[newIndex + 1] = image[3 * (x + y * settings.width) + 1];
@@ -54,73 +55,70 @@ void Window::uploadImage(bool flip) {
     texUploaded = true; 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, settings.width, settings.height, 0, GL_RGB, GL_UNSIGNED_BYTE, flip? texture: image);
 
-    if (flip) free(texture);
+    if (flip) delete[](texture);
 }
 
 
 
 void Window::begin() {
-    if (texUploaded) {
-        while (!glfwWindowShouldClose(windowPtr))
-        {
-            glfwPollEvents();
-            
-            ImGui_ImplOpenGL2_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-            
-            
-            
-            static float f = 0.0f;
-
-            ImGui::Begin("Hello, world!");
+    while (!glfwWindowShouldClose(windowPtr))
+    {
+        glfwPollEvents();
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
 
-            if (ImGui::Button("Render")) {
-                render(settings);
-                imageToColor(settings.width, settings.height, image, settings.framebuffer->color);
-                uploadImage(true);
-            }
-             
-            if (ImGui::Button("Save Image")) {
-                saveImage("", std::string(saveFile), settings.width, settings.height, image);
-            }
 
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-            ImGui::Render();
+        static float f = 0.0f;
 
-            
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            glBegin(GL_TRIANGLE_STRIP);
-
-            glTexCoord2f(0.0, 0.0);
-            glVertex2f(-1.0, -1.0);
-
-            glTexCoord2f(1.0, 0.0);
-            glVertex2f(1.0, -1.0);
-
-            glTexCoord2f(0.0, 1.0);
-            glVertex2f(-1.0, 1.0);
-
-            glTexCoord2f(1.0, 1.0);
-            glVertex2f(1.0, 1.0);
+        ImGui::Begin("Hello, world!");
 
 
-            glEnd();
-           
-            ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-
-            glfwMakeContextCurrent(windowPtr);
-            glfwSwapBuffers(windowPtr);
+        if (ImGui::Button("Render")) {
+            render(settings);
+            imageToColor(settings.width, settings.height, image, settings.framebuffer->color);
+            uploadImage(true);
         }
 
-        ImGui_ImplOpenGL2_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
+        if (ImGui::Button("Save Image")) {
+            saveImage("", std::string(saveFile), settings.width, settings.height, image);
+        }
 
-        glfwTerminate();
-        glDeleteTextures(1, &texID);
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::End();
+        ImGui::Render();
+
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glBegin(GL_TRIANGLE_STRIP);
+
+        glTexCoord2f(0.0, 0.0);
+        glVertex2f(-1.0, -1.0);
+
+        glTexCoord2f(1.0, 0.0);
+        glVertex2f(1.0, -1.0);
+
+        glTexCoord2f(0.0, 1.0);
+        glVertex2f(-1.0, 1.0);
+
+        glTexCoord2f(1.0, 1.0);
+        glVertex2f(1.0, 1.0);
+
+
+        glEnd();
+
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+
+        glfwMakeContextCurrent(windowPtr);
+        glfwSwapBuffers(windowPtr);
     }
+
+    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwTerminate();
+    glDeleteTextures(1, &texID);
 }

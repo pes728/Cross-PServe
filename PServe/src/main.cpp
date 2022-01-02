@@ -15,7 +15,7 @@
 int main(int argc, char** argv){
     const char* saveFile;
     if (argc < 2) {
-        saveFile = "D:\\Dev\\Cross PServe\\out";
+        saveFile = "../../../out";
     } else {
         saveFile = argv[1];
     }

@@ -30,7 +30,7 @@ find_package(OpenGL REQUIRED)
 
 target_link_libraries(PServe OpenGL::GL)
 
-
+message(STATUS CMAKE_CURRENT_BINARY_DIR)
 
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include <stdlib.h>
 #include <imgui.h>
 #include <imgui_impl_opengl2.h>
 #include <imgui_impl_glfw.h>
