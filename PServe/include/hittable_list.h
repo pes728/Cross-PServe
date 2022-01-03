@@ -7,10 +7,7 @@
 
 #ifndef hittable_list_h
 #define hittable_list_h
-#include "PMath.h"
 #include "Hittable.h"
-#include "common.h"
-
 #include <memory>
 #include <vector>
 
@@ -23,9 +20,9 @@ public:
     }
 
 
-    virtual bool hit(const ray& r, double tmin, double tmax, hit_record& rec) const override;
+    virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const override;
     
-    virtual bool bounding_box(double time0, double time1, aabb& outputBox) const override;
+    virtual bool bounding_box(float time0, float time1, aabb& outputBox) const override;
 
     std::vector<std::shared_ptr<hittable> > objects;
 };

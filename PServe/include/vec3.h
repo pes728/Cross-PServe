@@ -7,11 +7,11 @@
 
 #ifndef vec3_h
 #define vec3_h
-
+/*
 #include <cmath>
 #include "PMath.h"
 
-class vec3{
+class vec3 {
 public:
     vec3();
     vec3(double a);
@@ -124,7 +124,5 @@ vec3 random_in_hemisphere(const vec3& normal);
 vec3 reflect(const vec3& v, const vec3& n);
 
 vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat);
-
-
-
+*/
 #endif /* vec3_h */

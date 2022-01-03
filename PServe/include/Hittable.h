@@ -15,24 +15,24 @@
 class material;
 
 struct hit_record{
-    vec3 p;
-    vec3 normal;
+    glm::vec3 p;
+    glm::vec3 normal;
     shared_ptr<material> mat;
-    double t;
-    double u;
-    double v;
+    float t;
+    float u;
+    float v;
     bool front_face;
     
-    inline void set_face_normal(const ray& r, const vec3& outward_normal) {
-        front_face = dot(r.direction(), outward_normal) < 0;
+    inline void set_face_normal(const ray& r, const glm::vec3& outward_normal) {
+        front_face = glm::dot(r.direction(), outward_normal) < 0;
         normal = front_face ? outward_normal : -outward_normal;
     }
 };
 
 class hittable {
     public:
-        virtual bool hit(const ray& r, double t_min, double t_max, hit_record& rec) const = 0;
-        virtual bool bounding_box(double time0, double time1, aabb& outputBox) const = 0;
+        virtual bool hit(const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
+        virtual bool bounding_box(float time0, float time1, aabb& outputBox) const = 0;
 };
 
 #endif /* Hittable_h */

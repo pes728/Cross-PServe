@@ -23,18 +23,18 @@ int main(int argc, char** argv){
     const auto aspect_ratio = 16.0 / 9.0;
     const unsigned int image_width = 2560;
     const unsigned int image_height = static_cast<unsigned int>(image_width / aspect_ratio);
-    const unsigned int samples = 1;
-    const unsigned int max_depth = 50;
+    const unsigned int samples = 50;
+    const unsigned int max_depth = 8;
    
 
-    hittable_list w = random_scene();
+    hittable_list w = one_sphere();
 
     bvh_node bvh(w, 0, 1);
 
     // Camera
-    vec3 lookfrom(13,2,3);
-    vec3 lookat(0,0,0);
-    vec3 vup(0,1,0);
+    glm::vec3 lookfrom(13,2,3);
+    glm::vec3 lookat(0,0,0);
+    glm::vec3 vup(0,1,0);
     auto dist_to_focus = 10.0;
     auto aperture = 0.1;
 

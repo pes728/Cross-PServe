@@ -16,21 +16,21 @@ class moving_sphere : public hittable {
     public:
         moving_sphere() {}
         moving_sphere(
-            vec3 cen0, vec3 cen1, double t0, double t1, double r, shared_ptr<material> m)
+            glm::vec3 cen0, glm::vec3 cen1, float t0, float t1, float r, shared_ptr<material> m)
             : center0(cen0), center1(cen1), time0(t0), time1(t1), radius(r), mat(m)
         {};
 
         virtual bool hit(
-            const ray& r, double tmin, double tmax, hit_record& rec) const override;
+            const ray& r, float tmin, float tmax, hit_record& rec) const override;
         
-        virtual bool bounding_box(double time0, double time, aabb& ouputBox) const override;
+        virtual bool bounding_box(float time0, float time, aabb& ouputBox) const override;
 
-        vec3 center(double time) const;
+        glm::vec3 center(float time) const;
 
     public:
-        vec3 center0, center1;
-        double time0, time1;
-        double radius;
+        glm::vec3 center0, center1;
+        float time0, time1;
+        float radius;
         shared_ptr<material> mat;
 };
 

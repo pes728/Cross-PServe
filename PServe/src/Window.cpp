@@ -87,7 +87,7 @@ void Window::begin() {
             uploadImage(true);
         }
 
-        if (ImGui::Button("Render")) {
+        if (ImGui::Button("Render") && !finishedRendering->load()) {
             renderThread = std::thread(render, settings, finishedRendering);
         }
 

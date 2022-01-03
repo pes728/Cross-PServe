@@ -7,26 +7,26 @@
 
 #ifndef ray_h
 #define ray_h
+#include "common.h"
 
-#include "vec3.h"
 class ray{
 public:
     ray(){}
-    ray(const vec3& origin, const vec3& direction) : ori(origin), dir(direction), tm(0) {}
-    ray(const vec3& origin, const vec3& direction, double time) : ori(origin), dir(direction), tm(time) {}
+    ray(const glm::vec3& origin, const glm::vec3& direction) : ori(origin), dir(direction), tm(0) {}
+    ray(const glm::vec3& origin, const glm::vec3& direction, float time) : ori(origin), dir(direction), tm(time) {}
     
-    vec3 origin() const  { return ori; }
-    vec3 direction() const { return dir; }
-    double time() const    { return tm; }
+    glm::vec3 origin() const  { return ori; }
+    glm::vec3 direction() const { return dir; }
+    float time() const    { return tm; }
     
-    vec3 at(double t) const {
-        return ori + t * dir;
+    glm::vec3 at(float t) const {
+        return ori + (dir * t);
     }
     
     
-    vec3 ori, dir;
+    glm::vec3 ori, dir;
     
-    double tm;
+    float tm;
 };
 
 

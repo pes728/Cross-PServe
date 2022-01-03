@@ -5,7 +5,6 @@
 #include <imgui_impl_opengl2.h>
 #include <imgui_impl_glfw.h>
 #include "Render.h"
-#include <RenderSettings.h>
 
 class Window {
 public:

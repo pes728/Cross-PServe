@@ -11,71 +11,30 @@
 hittable_list one_sphere(){
     hittable_list world;
 
-    auto checker = make_shared<checker_texture>(vec3(0.2, 0.3, 0.1), vec3(0.9, 0.9, 0.9));
+    auto checker = make_shared<checker_texture>(glm::vec3(0.2, 0.3, 0.1), glm::vec3(0.9, 0.9, 0.9));
 
     auto ground_material = make_shared<lambertian>(checker);
-    world.add(make_shared<sphere>(vec3(0,-1000,0), 1000, ground_material));
+    world.add(make_shared<sphere>(glm::vec3(0,-1000,0), 1000, ground_material));
     
-    auto material1 = make_shared<metal>(vec3(0.7, 0.3, 0.2), 0.1);
-    world.add(make_shared<sphere>(vec3(0, 1, 0), 1.0, material1));
-    
-    return world;
-}
-
-hittable_list random_scene() {
-    hittable_list world;
-
-    auto checker = make_shared<checker_texture>(vec3(0.2, 0.3, 0.1), vec3(0.9, 0.9, 0.9));
-
-    auto ground_material = make_shared<lambertian>(checker);
-    world.add(make_shared<sphere>(vec3(0,-1000,0), 1000, ground_material));
-
-    for (int a = -11; a < 11; a++) {
-        for (int b = -11; b < 11; b++) {
-            auto choose_mat = random_double();
-            vec3 center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
-
-            if ((center - vec3(4, 0.2, 0)).length() > 0.9) {
-                shared_ptr<material> sphere_material;
-
-                if (choose_mat < 0.8) {
-                    // diffuse
-                    auto solid = make_shared<solid_color>(vec3(random_double(), random_double(), random_double()));
-                    sphere_material = make_shared<lambertian>(solid);
-                    auto center2 = center + vec3(0, random_double(0,.5), 0);
-                    world.add(make_shared<moving_sphere>(center, center2, 0.0, 1.0, 0.2, sphere_material));
-                } else if (choose_mat < 0.95) {
-                    // metal
-                    auto albedo = vec3::random(0.5, 1);
-                    auto fuzz = random_double(0, 0.5);
-                    sphere_material = make_shared<metal>(albedo, fuzz);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
-                } else {
-                    // glass
-                    sphere_material = make_shared<dielectric>(1.5);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
-                }
-            }
-        }
-    }
-
     auto material1 = make_shared<dielectric>(1.5);
-    world.add(make_shared<sphere>(vec3(0, 1, 0), 1.0, material1));
+    world.add(make_shared<sphere>(glm::vec3(0, 1, 0), 1.0, material1));
 
-    auto solid = make_shared<solid_color>(vec3(random_double()));
+    auto solid = make_shared<solid_color>(glm::vec3(random_float()));
     auto material2 = make_shared<lambertian>(solid);
-    world.add(make_shared<sphere>(vec3(-4, 1, 0), 1.0, material2));
+    world.add(make_shared<sphere>(glm::vec3(-4, 1, 0), 1.0, material2));
 
-    auto material3 = make_shared<metal>(vec3(0.7, 0.6, 0.5), 0.0);
-    world.add(make_shared<sphere>(vec3(4, 1, 0), 1.0, material3));
+    auto material3 = make_shared<metal>(glm::vec3(0.7, 0.6, 0.5), 0.0);
+    world.add(make_shared<sphere>(glm::vec3(4, 1, 0), 1.0, material3));
+    
+
 
     return world;
 }
 
-vec3 Background(const ray& r) {
-    vec3 unit_direction = unit_vector(r.direction());
-    auto t = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+glm::vec3 Background(const ray& r) {
+    glm::vec3 unit_direction = glm::normalize(r.direction());
+    auto t = 0.5f * (unit_direction.y + 1.0f);
+    return (1.0f - t) * glm::vec3(1.0f, 1.0f, 1.0f) + t * glm::vec3(0.5f, 0.7f, 1.0f);
 }
 
 Frame ray_colorR(const ray& r, const hittable& world, int depth) {
@@ -84,23 +43,23 @@ Frame ray_colorR(const ray& r, const hittable& world, int depth) {
     Frame frame;
     // If we've exceeded the ray bounce limit, no more light is gathered.
     if (depth <= 0) {
-        frame.color = vec3(0, 0, 0);
-        frame.normal = vec3(0, 0, 0);
+        frame.color = glm::vec3(0, 0, 0);
+        frame.normal = glm::vec3(0, 0, 0);
         return frame;
     }
 
     // If the ray hits nothing, return the background color.
     if (!world.hit(r, 0.001, infinity, rec)) {
         frame.color = frame.albedo = Background(r);
-        frame.normal = unit_vector(-r.dir);
+        frame.normal = glm::normalize(-r.dir);
         return frame;
     }
 
     ray scattered;
-    vec3 attenuation;
+    glm::vec3 attenuation;
     
     if (!rec.mat->scatter(r, rec, attenuation, scattered)) {
-        frame.color = vec3(0, 0, 0);
+        frame.color = glm::vec3(0, 0, 0);
         frame.normal = rec.normal;
         return frame;
     }
@@ -152,12 +111,12 @@ Frame ray_colorR(const ray& r, const hittable& world, int depth) {
 
 
 void render_pixel(int x, int y, RenderSettings settings){
-    vec3 color(0, 0, 0);
-    vec3 albedo(0, 0, 0);
-    vec3 normal(0, 0, 0);
-    for (int s = 0; s < settings.samples; s++) {
-        auto u = (x + random_double()) / (settings.width-1);
-        auto v = (y + random_double()) / (settings.height-1);
+    glm::vec3 color(0, 0, 0);
+    glm::vec3 albedo(0, 0, 0);
+    glm::vec3 normal(0, 0, 0);
+    for (unsigned int s = 0; s < settings.samples; s++) {
+        auto u = (x + random_float()) / (settings.width-1);
+        auto v = (y + random_float()) / (settings.height-1);
         ray r = settings.cam.get_ray(u, v);
 
 
@@ -167,13 +126,13 @@ void render_pixel(int x, int y, RenderSettings settings){
         normal += f.normal;
     }
 
-    setPixel(x, y, settings.width, settings.height, color / settings.samples, settings.framebuffer->color, true);
-    setPixel(x, y, settings.width, settings.height, albedo / settings.samples, settings.framebuffer->albedo, true);
-    setPixel(x, y, settings.width, settings.height, unit_vector(normal / settings.samples), settings.framebuffer->normal, true);
+    setPixel(x, y, settings.width, settings.height, color / glm::vec3(settings.samples), settings.framebuffer->color, true);
+    setPixel(x, y, settings.width, settings.height, albedo / glm::vec3(settings.samples), settings.framebuffer->albedo, true);
+    setPixel(x, y, settings.width, settings.height, glm::normalize(normal / glm::vec3(settings.samples)), settings.framebuffer->normal, true);
 }
 
 void thread_manager(int id, int jump_value, RenderSettings settings){
-    int index = id;
+    unsigned int index = id;
     while(index < settings.width * settings.height){
         render_pixel(index % settings.width , index / settings.width, settings);
         index += jump_value;
@@ -192,9 +151,9 @@ void render(RenderSettings settings, std::atomic_bool* finished){
     }
     //SingleThreaded
     else {
-        for (int y = 0; y < settings.height; y++) {
+        for (unsigned int y = 0; y < settings.height; y++) {
             std::cout << "Scanlines completed: " << y << '\r' << std::flush;
-            for (int x = 0; x < settings.width; x++) {
+            for (unsigned int x = 0; x < settings.width; x++) {
                 render_pixel(x, y, settings);
             }
         }

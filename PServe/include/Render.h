@@ -16,13 +16,10 @@
 #define THREADS 12
 #endif
 
-
-
 #include <thread>
 #include "Camera.h"
 #include "bvh_node.h"
 #include "hittable_list.h"
-#include "common.h"
 #include "Image.h"
 #include <iostream>
 #include "Sphere.h"

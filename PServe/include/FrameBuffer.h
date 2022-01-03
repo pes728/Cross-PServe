@@ -4,10 +4,10 @@
 class Frame {
 public:
 	//0, 0, 0 for all values
-	Frame() : color(vec3()), albedo(vec3()), normal(vec3()) {}
-	vec3 color;
-	vec3 albedo;
-	vec3 normal;
+	Frame() : color(glm::vec3()), albedo(glm::vec3()), normal(glm::vec3()) {}
+	glm::vec3 color;
+	glm::vec3 albedo;
+	glm::vec3 normal;
 };
 
 

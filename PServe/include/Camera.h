@@ -8,6 +8,7 @@
 #ifndef Camera_h
 #define Camera_h
 
+#include "common.h"
 #include "ray.h"
 
 class Camera{
@@ -15,39 +16,39 @@ public:
     Camera() {
 
     }
-    Camera(vec3 lookfrom, vec3 lookat, vec3 vup, double vfov, double aspect_ratio, double aperture, double focus_dist, double t0, double t1){
-        auto theta = degrees_to_radians(vfov);
-        auto h = tan(theta/2);
-        auto viewport_height = 2.0 * h;
-        auto viewport_width = aspect_ratio * viewport_height;
+    Camera(glm::vec3 lookfrom, glm::vec3 lookat, glm::vec3 vup, float vfov, float aspect_ratio, float aperture, float focus_dist, float t0, float t1){
+        float theta = vfov * pi / 180.0f;
+        float h = tan(theta/2);
+        float viewport_height = 2.0f * h;
+        float viewport_width = aspect_ratio * viewport_height;
 
-        w = unit_vector(lookfrom - lookat);
-        u = unit_vector(cross(vup, w));
+        w = glm::normalize(lookfrom - lookat);
+        u = glm::normalize(cross(vup, w));
         v = cross(w, u);
 
         origin = lookfrom;
         horizontal = focus_dist * viewport_width * u;
         vertical = focus_dist * viewport_height * v;
-        lower_left_corner = origin - horizontal/2 - vertical/2 - focus_dist*w;
+        lower_left_corner = origin - horizontal/2.0f - vertical/2.0f - focus_dist*w;
 
         lens_radius = aperture / 2;
         time0 = t0;
         time1 = t1;
     }
     
-    ray get_ray(double s, double t) const{
-        vec3 rd = lens_radius * random_in_unit_disk();
-        vec3 offset = u * rd.x() + v * rd.y();
-        return ray(origin + offset, lower_left_corner + s*horizontal + t*vertical - origin - offset, random_double(time0, time1));
+    ray get_ray(float s, float t) const{
+        glm::vec3 rd = lens_radius * random_in_unit_disk();
+        glm::vec3 offset = u * rd[0] + v * rd[1];
+        return ray(origin + offset, lower_left_corner + s*horizontal + t*vertical - origin - offset, random_float(time0, time1));
     }
     
-    vec3 origin;
-    vec3 lower_left_corner;
-    vec3 horizontal;
-    vec3 vertical;
-    vec3 u, v, w;
-    double lens_radius;
-    double time0, time1;
+    glm::vec3 origin;
+    glm::vec3 lower_left_corner;
+    glm::vec3 horizontal;
+    glm::vec3 vertical;
+    glm::vec3 u, v, w;
+    float lens_radius;
+    float time0, time1;
 };
 
 #endif /* Camera_h */

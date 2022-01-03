@@ -1,12 +1,12 @@
 #include "bvh_node.h"
 #include <algorithm>
 
-bool bvh_node::bounding_box(double time0, double time1, aabb& outputBox) const {
+bool bvh_node::bounding_box(float time0, float time1, aabb& outputBox) const {
 	outputBox = box;
 	return true;
 }
 
-bool bvh_node::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
+bool bvh_node::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
 	if (!box.hit(r, t_min, t_max)) return false;
 
 	bool hit_left = left->hit(r, t_min, t_max, rec);
@@ -18,7 +18,7 @@ bool bvh_node::hit(const ray& r, double t_min, double t_max, hit_record& rec) co
 bvh_node::bvh_node(std::vector<shared_ptr<hittable>>& src_objects, size_t start, size_t end, double time0, double time1) {
     auto objects = src_objects; // Create a modifiable array of the source scene objects
 
-    int axis = random_int(0, 2);
+    int axis = static_cast<int>(random_float(0, 2 + 1));
     auto comparator = (axis == 0) ? box_x_compare
         : (axis == 1) ? box_y_compare
         : box_z_compare;
@@ -63,7 +63,7 @@ inline bool box_compare(const shared_ptr<hittable> a, const shared_ptr<hittable>
 	if (!a->bounding_box(0, 0, box_a) || !b->bounding_box(0, 0, box_b))
 		std::cerr << "No bounding box in bvh_node constructor.\n";
 
-	return box_a.min().e[axis] < box_b.min().e[axis];
+	return box_a.min()[axis] < box_b.min()[axis];
 }
 
 
