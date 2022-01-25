@@ -29,16 +29,23 @@
 #include "FrameBuffer.h"
 #include <iomanip>
 #include "RenderSettings.h"
+#include <vector>
+
+class Scene{
+public:
+	bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const;
+	std::vector<Sphere> spheres;
+};
 
 void render(RenderSettings, std::atomic_bool* finished);
 
-hittable_list random_scene();
-
 hittable_list one_sphere();
+
+Scene spheres();
 
 void render_pixel(int x, int y, int image_width, int image_height, int samples, int max_depth, Camera c, const hittable& world, FrameBuffer* frame);
 
-Frame ray_colorR(const ray& r, const hittable& world, int max_depth);
+Frame ray_colorR(const ray& r, const Scene& world, int max_depth);
 
 //Frame ray_colorI(const ray& r, const hittable& world, int max_depth);
 

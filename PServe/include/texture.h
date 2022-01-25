@@ -25,7 +25,7 @@ public:
 class checker_texture : public texture {
 public:
 	checker_texture() {}
-	checker_texture(shared_ptr<texture> odd, shared_ptr<texture> even) : odd(odd), even(even){}
+	checker_texture(texture* odd, texture* even) : odd(odd), even(even){}
 
 	checker_texture(glm::vec3 odd, glm::vec3 even) : odd(make_shared<solid_color>(odd)), even(make_shared<solid_color>(even)){}
 

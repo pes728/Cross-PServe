@@ -8,7 +8,7 @@
 #include "Sphere.h"
 
 
-bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
+bool Sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
     glm::vec3 oc = r.origin() - center;
     float a = glm::length2(r.direction());
     float half_b = dot(oc, r.direction());
@@ -16,7 +16,7 @@ bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
     float discriminant = half_b*half_b - a*c;
 
     if (discriminant > 0) {
-        float root = sqrt(discriminant);
+        float root = glm::sqrt(discriminant);
 
         float temp = (-half_b - root) / a;
         if (temp < t_max && temp > t_min) {
@@ -45,7 +45,7 @@ bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const 
 }
 
 
-bool sphere::bounding_box(float time0, float time1, aabb& outputBox) const {
+bool Sphere::bounding_box(float time0, float time1, aabb& outputBox) const {
     outputBox = aabb(center - glm::vec3(radius, radius, radius),
                      center + glm::vec3(radius, radius, radius));
     return true;

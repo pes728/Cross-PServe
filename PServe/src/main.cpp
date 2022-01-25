@@ -25,12 +25,12 @@ int main(int argc, char** argv){
     const unsigned int image_height = static_cast<unsigned int>(image_width / aspect_ratio);
     const unsigned int samples = 50;
     const unsigned int max_depth = 8;
-   
+
+    //Scene s = spheres();
 
     hittable_list w = one_sphere();
 
-    bvh_node bvh(w, 0, 1);
-
+    //bvh_node bvh(w, 0, 1);
     // Camera
     glm::vec3 lookfrom(13,2,3);
     glm::vec3 lookat(0,0,0);
@@ -43,7 +43,7 @@ int main(int argc, char** argv){
     FrameBuffer* frame = new FrameBuffer(image_width, image_height);
 
 
-    RenderSettings settings(image_width, image_height, samples, max_depth, cam, &bvh, frame);
+    RenderSettings settings(image_width, image_height, samples, max_depth, cam, &w, frame);
     
     //oidn::DeviceRef device = oidn::newDevice();
     //device.commit();

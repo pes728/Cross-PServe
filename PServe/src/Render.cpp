@@ -8,23 +8,44 @@
 #include "Render.h"
 
 
+Scene spheres() {
+    Scene s;
+
+    auto checker = make_shared<checker_texture>(glm::vec3(0.2, 0.3, 0.1), glm::vec3(0.9, 0.9, 0.9));
+
+    auto ground_material = make_shared<lambertian>(checker);
+    s.spheres.push_back(Sphere(glm::vec3(0, -1000, 0), 1000, ground_material));
+
+    auto material1 = make_shared<dielectric>(1.5);
+    s.spheres.push_back(Sphere(glm::vec3(0, 1, 0), 1.0, material1));
+
+    auto solid = make_shared<solid_color>(glm::vec3(random_float()));
+    auto material2 = make_shared<lambertian>(solid);
+    s.spheres.push_back(Sphere(glm::vec3(-4, 1, 0), 1.0, material2));
+
+    auto material3 = make_shared<metal>(glm::vec3(0.7, 0.6, 0.5), 0.0);
+    s.spheres.push_back(Sphere(glm::vec3(4, 1, 0), 1.0, material3));
+
+    return s;
+}
+
 hittable_list one_sphere(){
     hittable_list world;
 
     auto checker = make_shared<checker_texture>(glm::vec3(0.2, 0.3, 0.1), glm::vec3(0.9, 0.9, 0.9));
 
     auto ground_material = make_shared<lambertian>(checker);
-    world.add(make_shared<sphere>(glm::vec3(0,-1000,0), 1000, ground_material));
+    world.add(make_shared<Sphere>(glm::vec3(0,-1000,0), 1000, ground_material));
     
     auto material1 = make_shared<dielectric>(1.5);
-    world.add(make_shared<sphere>(glm::vec3(0, 1, 0), 1.0, material1));
+    world.add(make_shared<Sphere>(glm::vec3(0, 1, 0), 1.0, material1));
 
     auto solid = make_shared<solid_color>(glm::vec3(random_float()));
     auto material2 = make_shared<lambertian>(solid);
-    world.add(make_shared<sphere>(glm::vec3(-4, 1, 0), 1.0, material2));
+    world.add(make_shared<Sphere>(glm::vec3(-4, 1, 0), 1.0, material2));
 
     auto material3 = make_shared<metal>(glm::vec3(0.7, 0.6, 0.5), 0.0);
-    world.add(make_shared<sphere>(glm::vec3(4, 1, 0), 1.0, material3));
+    world.add(make_shared<Sphere>(glm::vec3(4, 1, 0), 1.0, material3));
     
 
 
@@ -162,4 +183,21 @@ void render(RenderSettings settings, std::atomic_bool* finished){
     std::clock_t end = std::clock();
     std::cout << std::fixed << std::setprecision(2) << "CPU time used: "
     << (end-start) / CLOCKS_PER_SEC << " s\n";
+}
+
+
+
+bool Scene::hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
+    hit_record temp_rec;
+    bool hitAnything = false;
+    float closestHit = infinity;
+    for (auto& sphere : spheres) {
+        
+        if (sphere.hit(r, tmin, closestHit, temp_rec)) {
+            closestHit = temp_rec.t;
+            hitAnything = true;
+            rec = temp_rec;
+        }
+    }
+    return hitAnything;
 }

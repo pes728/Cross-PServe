@@ -21,7 +21,7 @@ bool moving_sphere::hit(
     float discriminant = half_b*half_b - a*c;
 
     if (discriminant > 0) {
-        float root = sqrt(discriminant);
+        float root =glm::sqrt(discriminant);
 
         auto temp = (-half_b - root) / a;
         if (temp < t_max && temp > t_min) {

@@ -3,6 +3,8 @@
 #include "Hittable.h"
 #include "FrameBuffer.h"
 
+class Scene;
+
 class RenderSettings{
 public:
 	RenderSettings() {}
@@ -20,6 +22,6 @@ public:
 	unsigned int samples;
 	unsigned int max_depth;
 	Camera cam;
-	hittable* world;
+	hittable *world;
 	FrameBuffer* framebuffer;
 };

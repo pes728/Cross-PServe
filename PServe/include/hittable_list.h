@@ -24,7 +24,7 @@ public:
     
     virtual bool bounding_box(float time0, float time1, aabb& outputBox) const override;
 
-    std::vector<std::shared_ptr<hittable> > objects;
+    std::vector<std::shared_ptr<hittable>> objects;
 };
 
 #endif /* World_h */

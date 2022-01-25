@@ -31,9 +31,9 @@ Color::Color(const glm::vec3& v, int samples) {
 
      float scale = 1.0f / samples;
 
-     r = sqrtf(scale * r);
-     g = sqrtf(scale * g);
-     b = sqrtf(scale * b);
+     r = glm::sqrt(scale * r);
+     g = glm::sqrt(scale * g);
+     b = glm::sqrt(scale * b);
 
      data[0] = static_cast<int>(256 * clamp(r, 0.0f, 0.999f));
      data[1] = static_cast<int>(256 * clamp(g, 0.0f, 0.999f));

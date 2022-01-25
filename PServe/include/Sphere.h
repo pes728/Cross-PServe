@@ -12,16 +12,15 @@
 #include "Hittable.h"
 
 
-class sphere : public hittable {
+class Sphere : public hittable {
     public:
-        sphere() {}
+        Sphere() {}
 
-        sphere(glm::vec3 cen, float r, shared_ptr<material> m): center(cen), radius(r), mat(m) {};
+        Sphere(glm::vec3 cen, float r, shared_ptr<material> m): center(cen), radius(r), mat(m) {};
         
-        virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const override;
-        virtual bool bounding_box(float time0, float time1, aabb& outputBox) const override;
+        bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const;
+        bool bounding_box(float time0, float time1, aabb& outputBox) const;
 
-    public:
         glm::vec3 center;
         float radius;
         shared_ptr<material> mat;

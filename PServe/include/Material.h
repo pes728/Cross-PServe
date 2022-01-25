@@ -75,7 +75,7 @@ class dielectric : public material {
 
             glm::vec3 unit_direction = glm::normalize(r_in.direction());
             double cos_theta = fmin(glm::dot(-unit_direction, rec.normal), 1.0);
-            double sin_theta = sqrt(1.0 - cos_theta*cos_theta);
+            double sin_theta = glm::sqrt(1.0 - cos_theta*cos_theta);
 
             bool cannot_refract = refraction_ratio * sin_theta > 1.0;
             glm::vec3 direction;
